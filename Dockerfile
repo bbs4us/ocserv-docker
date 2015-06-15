@@ -10,7 +10,7 @@ RUN cd /root && wget http://www.infradead.org/ocserv/download.html && export ocs
 	&& rm -rf /root/download.html && rm -rf ocserv-*
 
 ADD ./certs /opt/certs
-RUN certtool --generate-privkey --outfile /opt/certs/ca-key.pem && certtool --generate-self-signed --load-privkey /opt/certs/ca-key.pem --template /opt/certs/ca-tmp --outfile /opt/certs/ca-cert.pem && certtool --generate-privkey --outfile /opt/certs/server-key.pem && certtool --generate-certificate --load-privkey /opt/certs/server-key.pem --load-ca-certificate /opt/certs/ca-cert.pem --load-ca-privkey /opt/certs/ca-key.pem --template /opt/certs/serv-tmp --outfile /opt/certs/server-cert.pem
+RUN certtool --generate-privkey --bits 4096 --outfile /opt/certs/ca-key.pem && certtool --generate-self-signed --hash SHA512 --load-privkey /opt/certs/ca-key.pem --template /opt/certs/ca-tmp --outfile /opt/certs/ca-cert.pem && certtool --generate-privkey --outfile --bits 4096 /opt/certs/server-key.pem && certtool --generate-certificate --hash SHA512 -load-privkey /opt/certs/server-key.pem --load-ca-certificate /opt/certs/ca-cert.pem --load-ca-privkey /opt/certs/ca-key.pem --template /opt/certs/serv-tmp --outfile /opt/certs/server-cert.pem
 
 ADD ./bin /usr/local/bin
 RUN chmod a+x /usr/local/bin/*
